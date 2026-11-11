@@ -1,0 +1,1195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrieval Lab | Experiment 12</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #090d18;
+    --panel: #111827;
+    --panel2: #151e30;
+    --border: #263249;
+    --muted: #8996ad;
+    --text: #edf2ff;
+    --blue: #6c83ff;
+    --violet: #a78bfa;
+    --green: #4adea0;
+    --red: #fb7185;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 12% 0%, #18244a 0%, transparent 35%),
+        radial-gradient(ellipse at 90% 85%, #21183d 0%, transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    padding: 30px 5%;
+}
+
+button, textarea {
+    font: inherit;
+}
+
+.app {
+    max-width: 1450px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 35px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #6c83ff, #a78bfa);
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    box-shadow: 0 5px 25px #6c83ff45;
+}
+
+.brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1.6px;
+    margin-top: 4px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--green);
+    font-size: 12px;
+    border: 1px solid #245a48;
+    background: #10291f;
+    padding: 9px 14px;
+    border-radius: 30px;
+}
+
+.status-dot {
+    height: 7px;
+    width: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--green);
+}
+
+.hero {
+    margin-bottom: 30px;
+}
+
+.eyebrow {
+    color: #a5b4fc;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 13px;
+}
+
+h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(30px, 4vw, 43px);
+    letter-spacing: -1.5px;
+    margin-bottom: 10px;
+}
+
+.gradient {
+    background: linear-gradient(90deg, #8ba0ff, #c4a5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(400px, 1.1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    background: linear-gradient(145deg, #131c2d, #101725);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 45px #00000025;
+    min-width: 0;
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 23px;
+}
+
+.step {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #c3ccff;
+    background: #26335b;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.panel-heading h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+}
+
+.panel-heading p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.section-label {
+    font-size: 11px;
+    color: #a6b2c9;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+}
+
+.upload-box {
+    border: 1.5px dashed #46577c;
+    border-radius: 15px;
+    background: #111b30;
+    padding: 27px 15px;
+    text-align: center;
+    transition: .2s;
+}
+
+.upload-box.dragover {
+    border-color: var(--blue);
+    background: #1b2850;
+}
+
+.upload-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.upload-box h3 {
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.upload-box p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 17px;
+}
+
+.primary-btn, .secondary-btn {
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 12px 17px;
+    font-weight: 700;
+    font-size: 12px;
+    transition: .2s;
+}
+
+.primary-btn {
+    color: white;
+    background: linear-gradient(100deg, #586ff0, #8965dc);
+    box-shadow: 0 5px 18px #6c83ff35;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px #6c83ff50;
+}
+
+.primary-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.secondary-btn {
+    color: #cbd5ff;
+    background: #253252;
+    border: 1px solid #394c78;
+}
+
+.file-details {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: #19243a;
+    border: 1px solid #354767;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 13px;
+}
+
+.pdf-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #492537;
+    display: grid;
+    place-items: center;
+    color: #ff9cb1;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.file-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.file-info strong {
+    font-size: 12px;
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.file-info span {
+    color: var(--muted);
+    font-size: 10px;
+    display: block;
+    margin-top: 4px;
+}
+
+.remove-file {
+    background: none;
+    border: 0;
+    color: #ff91a5;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.config {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.config-card {
+    background: #172135;
+    border: 1px solid #293852;
+    border-radius: 12px;
+    padding: 13px;
+}
+
+.config-card label {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.config-card strong {
+    font-size: 18px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.config-card small {
+    color: #9ba9c3;
+    font-size: 10px;
+    margin-left: 4px;
+}
+
+.index-btn {
+    width: 100%;
+    margin-top: 19px;
+    padding: 15px;
+}
+
+.progress-wrap {
+    display: none;
+    margin-top: 17px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #aab6d0;
+    margin-bottom: 9px;
+}
+
+.progress-track {
+    height: 5px;
+    background: #27334b;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6c83ff, #bd9aff);
+    border-radius: 20px;
+    transition: width .3s;
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 26px 0;
+}
+
+textarea {
+    width: 100%;
+    min-height: 95px;
+    resize: vertical;
+    border: 1px solid #33425e;
+    border-radius: 12px;
+    background: #0d1525;
+    color: white;
+    padding: 14px;
+    outline: none;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+textarea:focus {
+    border-color: #788bff;
+    box-shadow: 0 0 0 3px #6c83ff18;
+}
+
+textarea::placeholder {
+    color: #687792;
+}
+
+.search-btn {
+    width: 100%;
+    margin-top: 11px;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 9px;
+}
+
+.empty-state {
+    min-height: 420px;
+    border: 1px dashed #35415a;
+    border-radius: 15px;
+    background: #10182780;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+}
+
+.empty-graphic {
+    width: 75px;
+    height: 75px;
+    border-radius: 23px;
+    display: grid;
+    place-items: center;
+    font-size: 34px;
+    background: linear-gradient(135deg, #26365d, #392b5e);
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    margin-bottom: 9px;
+}
+
+.empty-state p {
+    max-width: 270px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.results {
+    display: none;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 23px;
+}
+
+.stat {
+    background: #172238;
+    border: 1px solid #2a3b59;
+    border-radius: 13px;
+    padding: 15px;
+}
+
+.stat span {
+    color: var(--muted);
+    font-size: 10px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.stat strong {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 23px;
+}
+
+.stat:nth-child(2) strong { color: #a99aff; }
+.stat:nth-child(3) strong { color: #75d9b0; }
+.stat:nth-child(4) strong { color: #86b5ff; }
+
+.subheading {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 21px 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subheading span {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.model-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    background: #172238;
+    border: 1px solid #2a3b59;
+    padding: 13px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+.model-card span {
+    color: var(--muted);
+}
+
+.model-card strong {
+    color: #c2b4ff;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.chunk {
+    background: #111d30;
+    border: 1px solid #293954;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+}
+
+.chunk-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+}
+
+.chunk-top strong {
+    font-size: 11px;
+    color: #aebcff;
+}
+
+.chunk-top span {
+    font-size: 10px;
+    color: #9caac3;
+}
+
+.chunk p {
+    color: #c3cde0;
+    font-size: 11px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.match {
+    background: #111d30;
+    border: 1px solid #35466a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 11px;
+}
+
+.match-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.match-top strong {
+    font-size: 11px;
+    color: #b5c2ff;
+}
+
+.score {
+    font-size: 10px;
+    color: #9eafff;
+    background: #28365c;
+    border-radius: 20px;
+    padding: 5px 9px;
+}
+
+.match p {
+    color: #d0d8e9;
+    font-size: 11px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.message {
+    display: none;
+    margin-top: 15px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.message.error {
+    display: block;
+    background: #351c2a;
+    border: 1px solid #75374e;
+    color: #ffb2c1;
+}
+
+.message.success {
+    display: block;
+    background: #123127;
+    border: 1px solid #28634c;
+    color: #8ce5b9;
+}
+
+footer {
+    text-align: center;
+    color: #62708b;
+    font-size: 10px;
+    padding: 28px 0 5px;
+}
+
+@media (max-width: 850px) {
+    body { padding: 22px 4%; }
+    .workspace { grid-template-columns: 1fr; }
+    .empty-state { min-height: 250px; }
+}
+
+@media (max-width: 480px) {
+    header { align-items: flex-start; gap: 12px; }
+    .header-right { font-size: 10px; padding: 8px; }
+    .panel { padding: 17px; }
+    .brand-name { font-size: 16px; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+    <div class="brand">
+        <div class="logo">✦</div>
+        <div>
+            <div class="brand-name">RETRIEVAL LAB</div>
+            <div class="brand-sub">GENERATIVE AI · EXPERIMENT 12</div>
+        </div>
+    </div>
+    <div class="header-right">
+        <span class="status-dot"></span>
+        LOCAL WORKSPACE
+    </div>
+</header>
+
+<section class="hero">
+    <div class="eyebrow">EXPERIMENT 12 / BASIC RAG INDEXING</div>
+    <h1>Build your <span class="gradient">knowledge base.</span></h1>
+    <p>
+        Transform PDF documents into searchable knowledge.
+        Generate embeddings, build a vector index and explore relevant passages.
+    </p>
+</section>
+
+<main class="workspace">
+
+<!-- LEFT: INPUT WORKSPACE -->
+<section class="panel">
+
+    <div class="panel-heading">
+        <div class="step">01</div>
+        <div>
+            <h2>Document workspace</h2>
+            <p>Upload and configure your knowledge source</p>
+        </div>
+    </div>
+
+    <div class="section-label">KNOWLEDGE SOURCE</div>
+
+    <div class="upload-box" id="uploadBox">
+        <div class="upload-icon">📄</div>
+        <h3>Drop your PDF document here</h3>
+        <p>PDF format supported · Maximum 20 MB</p>
+        <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
+        <button type="button" class="secondary-btn" id="chooseBtn">
+            Browse files
+        </button>
+    </div>
+
+    <div class="file-details" id="fileDetails">
+        <div class="pdf-icon">PDF</div>
+        <div class="file-info">
+            <strong id="fileName">document.pdf</strong>
+            <span id="fileSize">0 KB</span>
+        </div>
+        <button type="button" class="remove-file" id="removeFile" title="Remove file">×</button>
+    </div>
+
+    <div class="config">
+        <div class="config-card">
+            <label>CHUNK SIZE</label>
+            <strong>500</strong>
+            <small>characters</small>
+        </div>
+        <div class="config-card">
+            <label>CHUNK OVERLAP</label>
+            <strong>50</strong>
+            <small>characters</small>
+        </div>
+    </div>
+
+    <button class="primary-btn index-btn" id="indexBtn" disabled>
+        ✦ &nbsp; Build vector index
+    </button>
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-label">
+            <span id="progressText">Processing document...</span>
+            <span id="progressPercent">Working</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="message" id="indexMessage"></div>
+
+    <div class="divider"></div>
+
+    <div class="panel-heading">
+        <div class="step">02</div>
+        <div>
+            <h2>Semantic search</h2>
+            <p>Find information by meaning, not just keywords</p>
+        </div>
+    </div>
+
+    <div class="section-label">YOUR SEARCH QUERY</div>
+
+    <textarea
+        id="searchInput"
+        placeholder="Example: What are the main concepts explained in this document?"
+    ></textarea>
+
+    <button class="primary-btn search-btn" id="searchBtn" disabled>
+        ⌕ &nbsp; Retrieve information
+    </button>
+
+    <p class="hint">Index a PDF before performing semantic search.</p>
+    <div class="message" id="searchMessage"></div>
+
+</section>
+
+<!-- RIGHT: OUTPUT WORKSPACE -->
+<section class="panel">
+
+    <div class="panel-heading">
+        <div class="step">03</div>
+        <div>
+            <h2>Index intelligence</h2>
+            <p>Embedding analytics and retrieval output</p>
+        </div>
+    </div>
+
+    <div class="empty-state" id="emptyState">
+        <div class="empty-graphic">⌘</div>
+        <h3>Your workspace is waiting</h3>
+        <p>
+            Upload a PDF and build your vector index.
+            Your document statistics, embedding information and chunk previews
+            will appear here.
+        </p>
+    </div>
+
+    <div class="results" id="results">
+
+        <div class="stats">
+            <div class="stat">
+                <span>DOCUMENT PAGES</span>
+                <strong id="pageCount">0</strong>
+            </div>
+            <div class="stat">
+                <span>TEXT CHUNKS</span>
+                <strong id="chunkCount">0</strong>
+            </div>
+            <div class="stat">
+                <span>CHARACTERS</span>
+                <strong id="characterCount">0</strong>
+            </div>
+            <div class="stat">
+                <span>VECTOR COUNT</span>
+                <strong id="vectorCount">0</strong>
+            </div>
+        </div>
+
+        <div class="subheading">
+            Embedding configuration
+            <span>LOCAL MODEL</span>
+        </div>
+
+        <div class="model-card">
+            <span>Embedding model</span>
+            <strong id="embeddingModel">nomic-embed-text</strong>
+        </div>
+
+        <div class="model-card">
+            <span>Vector dimensions</span>
+            <strong id="embeddingDimension">-</strong>
+        </div>
+
+        <div class="model-card">
+            <span>Vector database</span>
+            <strong>FAISS · In-memory</strong>
+        </div>
+
+        <div class="subheading">
+            Chunk inspection
+            <span id="previewCount">0 PREVIEWS</span>
+        </div>
+
+        <div id="chunkPreviews"></div>
+
+        <div class="divider"></div>
+
+        <div class="subheading">
+            Retrieved passages
+            <span>TOP 3 MATCHES</span>
+        </div>
+
+        <div id="searchResults">
+            <div class="hint">Your semantic search results will appear here.</div>
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<footer>
+    RETRIEVAL LAB · EXPERIMENT 12 · POWERED BY OLLAMA + LANGCHAIN + FAISS
+</footer>
+
+</div>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const chooseBtn = document.getElementById("chooseBtn");
+const uploadBox = document.getElementById("uploadBox");
+const fileDetails = document.getElementById("fileDetails");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+const removeFile = document.getElementById("removeFile");
+
+const indexBtn = document.getElementById("indexBtn");
+const searchBtn = document.getElementById("searchBtn");
+const searchInput = document.getElementById("searchInput");
+
+const progressWrap = document.getElementById("progressWrap");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const progressPercent = document.getElementById("progressPercent");
+
+const indexMessage = document.getElementById("indexMessage");
+const searchMessage = document.getElementById("searchMessage");
+
+let selectedFile = null;
+let isIndexed = false;
+let isIndexing = false;
+let isSearching = false;
+
+function showMessage(element, message, type) {
+    element.textContent = message;
+    element.className = "message " + type;
+}
+
+function clearMessage(element) {
+    element.textContent = "";
+    element.className = "message";
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+function selectFile(file) {
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+        showMessage(indexMessage, "Please select a PDF file.", "error");
+        return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+        showMessage(indexMessage, "File size must be below 20 MB.", "error");
+        return;
+    }
+
+    selectedFile = file;
+    isIndexed = false;
+    searchBtn.disabled = true;
+
+    fileName.textContent = file.name;
+    fileSize.textContent = formatBytes(file.size);
+
+    fileDetails.style.display = "flex";
+    uploadBox.style.display = "none";
+
+    indexBtn.disabled = false;
+    indexBtn.textContent = "✦  Build vector index";
+
+    document.getElementById("emptyState").style.display = "flex";
+    document.getElementById("results").style.display = "none";
+
+    clearMessage(indexMessage);
+    clearMessage(searchMessage);
+}
+
+chooseBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    fileInput.click();
+});
+
+fileInput.addEventListener("change", function() {
+    if (fileInput.files.length > 0) {
+        selectFile(fileInput.files[0]);
+    }
+});
+
+removeFile.addEventListener("click", function() {
+    selectedFile = null;
+    isIndexed = false;
+    fileInput.value = "";
+
+    fileDetails.style.display = "none";
+    uploadBox.style.display = "block";
+
+    indexBtn.disabled = true;
+    searchBtn.disabled = true;
+
+    document.getElementById("emptyState").style.display = "flex";
+    document.getElementById("results").style.display = "none";
+
+    clearMessage(indexMessage);
+    clearMessage(searchMessage);
+});
+
+uploadBox.addEventListener("dragover", function(event) {
+    event.preventDefault();
+    uploadBox.classList.add("dragover");
+});
+
+uploadBox.addEventListener("dragleave", function() {
+    uploadBox.classList.remove("dragover");
+});
+
+uploadBox.addEventListener("drop", function(event) {
+    event.preventDefault();
+    uploadBox.classList.remove("dragover");
+
+    const file = event.dataTransfer.files[0];
+    selectFile(file);
+});
+
+function displayIndexResults(data) {
+    const info = data.info;
+
+    document.getElementById("pageCount").textContent = info.pages;
+    document.getElementById("chunkCount").textContent = info.chunks;
+    document.getElementById("characterCount").textContent =
+        Number(info.characters).toLocaleString();
+    document.getElementById("vectorCount").textContent = info.vector_count;
+
+    document.getElementById("embeddingModel").textContent =
+        info.embedding_model;
+
+    document.getElementById("embeddingDimension").textContent =
+        info.embedding_dimension;
+
+    document.getElementById("previewCount").textContent =
+        data.previews.length + " PREVIEWS";
+
+    const previewContainer = document.getElementById("chunkPreviews");
+    previewContainer.innerHTML = "";
+
+    data.previews.forEach(function(chunk) {
+        const card = document.createElement("div");
+        card.className = "chunk";
+
+        const top = document.createElement("div");
+        top.className = "chunk-top";
+
+        const title = document.createElement("strong");
+        title.textContent = "CHUNK " + chunk.number;
+
+        const page = document.createElement("span");
+        page.textContent = "PAGE " + chunk.page;
+
+        const content = document.createElement("p");
+        content.textContent = chunk.text;
+
+        top.appendChild(title);
+        top.appendChild(page);
+        card.appendChild(top);
+        card.appendChild(content);
+        previewContainer.appendChild(card);
+    });
+
+    document.getElementById("emptyState").style.display = "none";
+    document.getElementById("results").style.display = "block";
+
+    document.getElementById("searchResults").innerHTML =
+        '<div class="hint">Index created. Enter a question to retrieve relevant passages.</div>';
+
+    searchBtn.disabled = false;
+}
+
+indexBtn.addEventListener("click", async function() {
+    if (!selectedFile || isIndexing) return;
+
+    isIndexing = true;
+    indexBtn.disabled = true;
+    searchBtn.disabled = true;
+
+    clearMessage(indexMessage);
+
+    progressWrap.style.display = "block";
+    progressBar.style.width = "15%";
+    progressText.textContent = "Reading and splitting PDF...";
+    progressPercent.textContent = "Working";
+
+    const progressTimer = setInterval(function() {
+        const current = parseFloat(progressBar.style.width) || 15;
+        if (current < 85) {
+            progressBar.style.width = (current + 5) + "%";
+        }
+    }, 1200);
+
+    try {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        progressText.textContent = "Generating embeddings with Ollama...";
+
+        const response = await fetch("/api/index", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Indexing failed.");
+        }
+
+        progressBar.style.width = "100%";
+        progressPercent.textContent = "100%";
+        progressText.textContent = "Index successfully created";
+
+        displayIndexResults(data);
+
+        isIndexed = true;
+
+        showMessage(
+            indexMessage,
+            "Document indexed successfully. Your knowledge base is ready.",
+            "success"
+        );
+
+    } catch (error) {
+        showMessage(indexMessage, error.message, "error");
+        progressText.textContent = "Indexing failed";
+        progressPercent.textContent = "Error";
+
+    } finally {
+        clearInterval(progressTimer);
+        isIndexing = false;
+        indexBtn.disabled = !selectedFile;
+        indexBtn.textContent = "✦  Build vector index";
+
+        setTimeout(function() {
+            progressWrap.style.display = "none";
+            progressBar.style.width = "0%";
+        }, 1800);
+    }
+});
+
+function displaySearchResults(matches) {
+    const container = document.getElementById("searchResults");
+    container.innerHTML = "";
+
+    if (!matches || matches.length === 0) {
+        container.textContent = "No matching passages were found.";
+        return;
+    }
+
+    matches.forEach(function(match, index) {
+        const card = document.createElement("div");
+        card.className = "match";
+
+        const top = document.createElement("div");
+        top.className = "match-top";
+
+        const title = document.createElement("strong");
+        title.textContent = "MATCH " + String(index + 1).padStart(2, "0");
+
+        const score = document.createElement("span");
+        score.className = "score";
+        score.textContent = "Distance: " + match.distance;
+
+        const content = document.createElement("p");
+        content.textContent = match.text;
+
+        const page = document.createElement("div");
+        page.className = "hint";
+        page.textContent = "Source page: " + match.page;
+
+        top.appendChild(title);
+        top.appendChild(score);
+        card.appendChild(top);
+        card.appendChild(content);
+        card.appendChild(page);
+
+        container.appendChild(card);
+    });
+}
+
+async function performSearch() {
+    const query = searchInput.value.trim();
+
+    if (!isIndexed) {
+        showMessage(searchMessage, "Please build the index first.", "error");
+        return;
+    }
+
+    if (!query) {
+        showMessage(searchMessage, "Enter a search query.", "error");
+        return;
+    }
+
+    if (isSearching) return;
+
+    isSearching = true;
+    searchBtn.disabled = true;
+    searchBtn.textContent = "Searching...";
+
+    clearMessage(searchMessage);
+
+    try {
+        const response = await fetch("/api/search", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query: query })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Search failed.");
+        }
+
+        displaySearchResults(data.matches);
+
+        showMessage(
+            searchMessage,
+            "Retrieved " + data.matches.length + " relevant passages.",
+            "success"
+        );
+
+    } catch (error) {
+        showMessage(searchMessage, error.message, "error");
+
+    } finally {
+        isSearching = false;
+        searchBtn.disabled = !isIndexed;
+        searchBtn.textContent = "⌕  Retrieve information";
+    }
+}
+
+searchBtn.addEventListener("click", performSearch);
+
+searchInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        performSearch();
+    }
+});
+</script>
+
+</body>
+</html>

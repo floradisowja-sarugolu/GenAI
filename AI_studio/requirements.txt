@@ -1,0 +1,9 @@
+streamlit
+requests
+pillow
+numpy<2
+pypdf
+sentence-transformers
+faiss-cpu
+tensorflow==2.15.1
+matplotlib

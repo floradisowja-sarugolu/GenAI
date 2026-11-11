@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCEL Studio | Text Summarizer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #243b63;
+            --navy-dark: #192d50;
+            --blue: #4169a8;
+            --background: #f5f7fb;
+            --white: #ffffff;
+            --text: #243247;
+            --muted: #8793a5;
+            --border: #e8edf4;
+            --green: #23845c;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button, textarea {
+            font: inherit;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--navy);
+            color: white;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            font-size: 19px;
+        }
+
+        .brand-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name span {
+            color: var(--blue);
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .experiment-tag {
+            color: #718099;
+            font-size: 12px;
+            font-weight: 600;
+            background: #f2f5fa;
+            padding: 8px 12px;
+            border-radius: 7px;
+        }
+
+        .connection {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #36ae78;
+            box-shadow: 0 0 0 4px #e4f5ed;
+        }
+
+        .main {
+            width: min(900px, 91%);
+            margin: 55px auto 65px;
+        }
+
+        .intro {
+            margin-bottom: 29px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--blue);
+            background: #eaf0fa;
+            padding: 7px 11px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(29px, 5vw, 38px);
+            letter-spacing: -1.5px;
+            color: #202f45;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7d899c;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .editor-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            box-shadow: 0 8px 28px rgba(36, 59, 99, 0.045);
+            overflow: hidden;
+        }
+
+        .card-heading {
+            padding: 17px 21px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-heading strong {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .field-label {
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            color: #a1aabc;
+            font-weight: 700;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 210px;
+            border: none;
+            outline: none;
+            resize: vertical;
+            padding: 22px;
+            font-size: 14px;
+            line-height: 1.9;
+            color: #35445a;
+            background: white;
+        }
+
+        textarea::placeholder {
+            color: #adb7c6;
+        }
+
+        .editor-footer {
+            border-top: 1px solid var(--border);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .counts {
+            color: #98a3b3;
+            font-size: 11px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .btn-sample {
+            background: #f2f5fa;
+            color: #64748b;
+        }
+
+        .btn-sample:hover {
+            background: #e8edf5;
+        }
+
+        .btn-clear {
+            background: white;
+            border: 1px solid var(--border);
+            color: #748197;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+            min-width: 155px;
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error {
+            display: none;
+            margin-top: 14px;
+            padding: 13px 15px;
+            border: 1px solid #f2caca;
+            background: #fff3f3;
+            color: #b33b3b;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .loading {
+            display: none;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 27px;
+            height: 27px;
+            border: 3px solid #e5ebf4;
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .loading p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 35px;
+            animation: appear 0.4s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(9px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 13px;
+            gap: 12px;
+        }
+
+        .result-title h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 19px;
+            letter-spacing: -0.5px;
+        }
+
+        .copy-btn {
+            border: 1px solid #dfe6f0;
+            background: white;
+            color: var(--blue);
+            border-radius: 7px;
+            padding: 9px 13px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .copy-btn:hover {
+            background: #edf3fc;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 7px 24px rgba(36, 59, 99, 0.04);
+        }
+
+        .summary-top {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 17px;
+        }
+
+        .summary-symbol {
+            width: 29px;
+            height: 29px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: var(--blue);
+            background: #edf3fc;
+            font-size: 14px;
+        }
+
+        .summary-top span {
+            font-size: 11px;
+            color: #8290a4;
+            font-weight: 700;
+        }
+
+        .summary-text {
+            color: #3d4c61;
+            font-size: 14px;
+            line-height: 1.95;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .result-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 13px;
+            color: #8c98a9;
+            font-size: 11px;
+        }
+
+        .pipeline-card {
+            margin-top: 30px;
+            padding: 21px;
+            background: #edf2fa;
+            border: 1px solid #e4ebf6;
+            border-radius: 13px;
+        }
+
+        .pipeline-heading {
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 17px;
+            color: #425574;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            background: white;
+            border: 1px solid #e0e8f4;
+            border-radius: 8px;
+            padding: 10px 13px;
+            font-size: 11px;
+            color: #425a7c;
+            font-weight: 600;
+        }
+
+        .arrow {
+            color: #8a9ab3;
+            font-size: 16px;
+        }
+
+        .pipeline-note {
+            text-align: center;
+            color: #8795aa;
+            font-size: 11px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #a0aaba;
+            font-size: 11px;
+            margin-top: 38px;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 0 5%;
+                height: 62px;
+            }
+
+            .experiment-tag {
+                display: none;
+            }
+
+            .main {
+                margin-top: 35px;
+            }
+
+            .editor-footer {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .btn-primary {
+                flex: 1;
+            }
+
+            .summary-card {
+                padding: 19px;
+            }
+
+            .pipeline {
+                gap: 7px;
+            }
+
+            .step {
+                padding: 9px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div class="brand-name">LCEL <span>Studio</span></div>
+        </div>
+
+        <div class="top-right">
+            <span class="experiment-tag">EXPERIMENT 11</span>
+            <div class="connection">
+                <span class="dot"></span>
+                Local AI
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <section class="intro">
+            <div class="eyebrow">✧ LangChain Expression Language</div>
+            <h1>Text Summarizer</h1>
+            <p class="subtitle">
+                Turn lengthy passages into clear, meaningful summaries.
+                Enter your text and let the LCEL chain do the work.
+            </p>
+        </section>
+
+        <section class="editor-card">
+
+            <div class="card-heading">
+                <strong>Your input text</strong>
+                <span class="field-label">TEXT INPUT</span>
+            </div>
+
+            <textarea
+                id="inputText"
+                placeholder="Paste your text here. You can enter an article, paragraph, notes, or any passage you want to summarize..."
+            ></textarea>
+
+            <div class="editor-footer">
+                <div class="counts">
+                    <span id="wordCount">0 words</span>
+                    <span> · </span>
+                    <span id="charCount">0 characters</span>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-sample" id="sampleBtn">
+                        Try sample
+                    </button>
+
+                    <button class="btn btn-clear" id="clearBtn">
+                        Clear
+                    </button>
+
+                    <button class="btn btn-primary" id="summarizeBtn">
+                        Summarize text →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="error" id="errorBox"></div>
+
+        <section class="loading" id="loadingBox">
+            <div class="spinner"></div>
+            <strong>Generating your summary</strong>
+            <p>Ollama is processing your text through the LCEL chain...</p>
+        </section>
+
+        <section class="result-section" id="resultSection">
+
+            <div class="result-title">
+                <h2>Generated summary</h2>
+                <button class="copy-btn" id="copyBtn">
+                    Copy summary
+                </button>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-top">
+                    <div class="summary-symbol">✦</div>
+                    <span>AI GENERATED SUMMARY</span>
+                </div>
+
+                <div class="summary-text" id="summaryText"></div>
+            </div>
+
+            <div class="result-meta">
+                <span id="modelInfo">Model: llama3.2:3b</span>
+                <span id="timeInfo"></span>
+            </div>
+
+        </section>
+
+        <section class="pipeline-card">
+            <div class="pipeline-heading">
+                How the LCEL chain works
+            </div>
+
+            <div class="pipeline">
+                <div class="step">Prompt Template</div>
+                <span class="arrow">→</span>
+                <div class="step">ChatOllama</div>
+                <span class="arrow">→</span>
+                <div class="step">StrOutputParser</div>
+                <span class="arrow">→</span>
+                <div class="step">Output</div>
+            </div>
+
+            <p class="pipeline-note">
+                Each component passes its output to the next stage of the chain.
+            </p>
+        </section>
+
+        <footer class="footer">
+            Experiment 11 · Building a Simple LCEL Chain · Powered by Ollama
+        </footer>
+
+    </main>
+
+    <script>
+        const inputText = document.getElementById("inputText");
+        const wordCount = document.getElementById("wordCount");
+        const charCount = document.getElementById("charCount");
+
+        const summarizeBtn = document.getElementById("summarizeBtn");
+        const sampleBtn = document.getElementById("sampleBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const copyBtn = document.getElementById("copyBtn");
+
+        const loadingBox = document.getElementById("loadingBox");
+        const resultSection = document.getElementById("resultSection");
+        const summaryText = document.getElementById("summaryText");
+        const errorBox = document.getElementById("errorBox");
+
+        const sample = `Artificial Intelligence is a branch of computer science that focuses on creating machines capable of performing tasks that usually require human intelligence. It is used in healthcare, education, banking, transportation, and many other industries. Machine learning and deep learning are important technologies used in AI. These technologies help computers learn from data, identify patterns, and make predictions.`;
+
+        function updateCounts() {
+            const text = inputText.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+
+            wordCount.textContent = `${words} words`;
+            charCount.textContent = `${inputText.value.length} characters`;
+        }
+
+        inputText.addEventListener("input", updateCounts);
+
+        sampleBtn.addEventListener("click", () => {
+            inputText.value = sample;
+            updateCounts();
+            inputText.focus();
+            errorBox.style.display = "none";
+        });
+
+        clearBtn.addEventListener("click", () => {
+            inputText.value = "";
+            updateCounts();
+            errorBox.style.display = "none";
+            resultSection.style.display = "none";
+            inputText.focus();
+        });
+
+        summarizeBtn.addEventListener("click", async () => {
+            const text = inputText.value.trim();
+
+            errorBox.style.display = "none";
+
+            if (!text) {
+                errorBox.textContent = "Please enter some text before generating a summary.";
+                errorBox.style.display = "block";
+                inputText.focus();
+                return;
+            }
+
+            resultSection.style.display = "none";
+            loadingBox.style.display = "block";
+            summarizeBtn.disabled = true;
+            summarizeBtn.textContent = "Processing...";
+
+            try {
+                const response = await fetch("/api/summarize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || "Unable to generate summary.");
+                }
+
+                summaryText.textContent = data.result;
+
+                document.getElementById("modelInfo").textContent =
+                    `Model: ${data.model || "llama3.2:3b"}`;
+
+                document.getElementById("timeInfo").textContent =
+                    `Completed in ${data.elapsed_time ?? "-"} seconds`;
+
+                resultSection.style.display = "block";
+
+            } catch (error) {
+                errorBox.textContent = error.message;
+                errorBox.style.display = "block";
+            } finally {
+                loadingBox.style.display = "none";
+                summarizeBtn.disabled = false;
+                summarizeBtn.textContent = "Summarize text →";
+            }
+        });
+
+        copyBtn.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(summaryText.textContent);
+                copyBtn.textContent = "Copied ✓";
+                setTimeout(() => {
+                    copyBtn.textContent = "Copy summary";
+                }, 1800);
+            } catch (error) {
+                copyBtn.textContent = "Copy unavailable";
+            }
+        });
+
+        updateCounts();
+    </script>
+
+</body>
+</html>

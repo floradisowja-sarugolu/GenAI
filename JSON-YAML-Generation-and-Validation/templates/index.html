@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JSON & YAML Studio</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f5f9;
+    color: #1e293b;
+    min-height: 100vh;
+}
+
+.header {
+    height: 68px;
+    background: #111c35;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+}
+
+.logo {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.header-status {
+    color: #a9c7d9;
+    font-size: 12px;
+}
+
+.container {
+    max-width: 1450px;
+    margin: auto;
+    padding: 25px;
+}
+
+.page-heading {
+    margin-bottom: 22px;
+}
+
+.page-heading h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.page-heading p {
+    color: #7b879a;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e1e6ee;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.panel-heading {
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.panel-heading h2 {
+    font-size: 16px;
+}
+
+.panel-heading p {
+    color: #8993a4;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.form-body {
+    padding: 20px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+
+textarea {
+    width: 100%;
+    height: 210px;
+    resize: vertical;
+    padding: 13px;
+    border: 1px solid #d8deea;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.6;
+    outline: none;
+}
+
+textarea:focus,
+select:focus {
+    border-color: #4979dc;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d8deea;
+    border-radius: 8px;
+    background: white;
+    font-size: 13px;
+    outline: none;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.generate-btn {
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background: #315fce;
+    color: white;
+    font-weight: bold;
+    padding: 14px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.generate-btn:hover {
+    background: #244eaf;
+}
+
+.generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sample-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: 1px solid #dce2eb;
+    border-radius: 8px;
+    background: white;
+    color: #536078;
+    cursor: pointer;
+}
+
+.sample-btn:hover {
+    background: #f5f7fb;
+}
+
+.model-info {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f5f8ff;
+    border-radius: 8px;
+    color: #60718e;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.output-body {
+    padding: 20px;
+    min-height: 480px;
+}
+
+.empty-state {
+    min-height: 430px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #8993a4;
+    gap: 12px;
+}
+
+.empty-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+    background: #edf2ff;
+    color: #315fce;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.empty-state h3 {
+    color: #34415a;
+    font-size: 18px;
+}
+
+.empty-state p {
+    font-size: 13px;
+    max-width: 350px;
+    line-height: 1.6;
+}
+
+.result-section {
+    display: none;
+}
+
+.result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.result-top h3 {
+    font-size: 17px;
+}
+
+.status {
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.status.valid {
+    background: #e7f8ef;
+    color: #16845a;
+}
+
+.status.invalid {
+    background: #fff0f0;
+    color: #c43f3f;
+}
+
+.result-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.meta-item {
+    background: #f5f7fb;
+    padding: 9px 12px;
+    border-radius: 7px;
+    color: #68758a;
+    font-size: 11px;
+}
+
+.code-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #17243c;
+    color: white;
+    padding: 13px 16px;
+    border-radius: 9px 9px 0 0;
+    font-size: 12px;
+}
+
+.copy-btn {
+    border: 1px solid #56657c;
+    background: transparent;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.copy-btn:hover {
+    background: #34435c;
+}
+
+.code-output {
+    background: #111827;
+    color: #c7e7ce;
+    padding: 20px;
+    border-radius: 0 0 9px 9px;
+    min-height: 220px;
+    max-height: 480px;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.validation-card {
+    margin-top: 17px;
+    border: 1px solid #e5eaf1;
+    border-radius: 9px;
+    padding: 15px;
+}
+
+.validation-card h4 {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.validation-message {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #16845a;
+}
+
+.validation-message.error-text {
+    color: #c43f3f;
+}
+
+.attempts {
+    margin-top: 18px;
+}
+
+.attempts h4 {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.attempt-item {
+    padding: 11px 13px;
+    background: #f6f8fb;
+    border-radius: 7px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.attempt-good {
+    color: #16845a;
+    font-weight: bold;
+}
+
+.attempt-bad {
+    color: #c43f3f;
+    font-weight: bold;
+}
+
+.error-box {
+    display: none;
+    padding: 12px;
+    margin-top: 15px;
+    background: #fff0f0;
+    border: 1px solid #ffdada;
+    border-radius: 8px;
+    color: #c43f3f;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.loading {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    margin-top: 15px;
+    background: #f5f8ff;
+    border-radius: 8px;
+    color: #52688f;
+    font-size: 12px;
+}
+
+.spinner {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #dce5f7;
+    border-top-color: #315fce;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media(max-width: 900px) {
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .output-body {
+        min-height: 350px;
+    }
+}
+
+@media(max-width: 550px) {
+    .container {
+        padding: 14px;
+    }
+
+    .header {
+        padding: 0 15px;
+    }
+
+    .page-heading h1 {
+        font-size: 21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">JSON & YAML Studio</div>
+    <div class="header-status">● LOCAL AI · OLLAMA</div>
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <h1>Structured Data Generator</h1>
+        <p>
+            Convert dataset descriptions into valid JSON or YAML
+            using a locally running AI model.
+        </p>
+    </div>
+
+    <div class="workspace">
+
+        <!-- LEFT: INPUT PANEL -->
+
+        <section class="panel">
+
+            <div class="panel-heading">
+                <h2>Dataset Configuration</h2>
+                <p>Describe your data and select an output format.</p>
+            </div>
+
+            <div class="form-body">
+
+                <div class="form-group">
+                    <label for="description">
+                        Dataset Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Example: Create a dataset of three books. Each book should contain a title, author, and publication year."
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="format">Output Format</label>
+
+                    <select id="format">
+                        <option value="json">JSON</option>
+                        <option value="yaml">YAML</option>
+                    </select>
+                </div>
+
+                <button
+                    class="generate-btn"
+                    id="generateBtn"
+                    onclick="generateData()"
+                >
+                    Generate Structured Data
+                </button>
+
+                <button
+                    class="sample-btn"
+                    onclick="loadSample()"
+                >
+                    Load Sample Description
+                </button>
+
+                <div class="model-info">
+                    <strong>AI Model:</strong> Llama 3.2 (3B)<br>
+                    <strong>Engine:</strong> Ollama<br>
+                    <strong>Validation:</strong> Python JSON / YAML Parser<br>
+                    <strong>Auto-refinement:</strong> Up to 2 retries
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <span id="loadingText">
+                        Generating structured data...
+                    </span>
+                </div>
+
+                <div class="error-box" id="errorBox"></div>
+
+            </div>
+        </section>
+
+        <!-- RIGHT: OUTPUT PANEL -->
+
+        <section class="panel">
+
+            <div class="panel-heading">
+                <h2>Generated Output</h2>
+                <p>Structured result and parser validation.</p>
+            </div>
+
+            <div class="output-body">
+
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">{ }</div>
+                    <h3>Waiting for your input</h3>
+                    <p>
+                        Your generated JSON or YAML data will appear here,
+                        along with validation results.
+                    </p>
+                </div>
+
+                <div class="result-section" id="resultSection">
+
+                    <div class="result-top">
+                        <h3 id="resultTitle">Generated JSON</h3>
+                        <span class="status" id="resultStatus"></span>
+                    </div>
+
+                    <div class="result-meta">
+                        <div class="meta-item" id="modelMeta"></div>
+                        <div class="meta-item" id="timeMeta"></div>
+                        <div class="meta-item" id="retryMeta"></div>
+                    </div>
+
+                    <div class="code-heading">
+                        <span id="codeLanguage">JSON OUTPUT</span>
+                        <button
+                            class="copy-btn"
+                            onclick="copyOutput()"
+                        >
+                            Copy Output
+                        </button>
+                    </div>
+
+                    <pre class="code-output" id="codeOutput"></pre>
+
+                    <div class="validation-card">
+                        <h4>Parser Validation</h4>
+                        <div
+                            class="validation-message"
+                            id="validationMessage"
+                        ></div>
+                    </div>
+
+                    <div class="attempts">
+                        <h4>Generation & Refinement History</h4>
+                        <div id="attemptList"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+<script>
+let latestOutput = "";
+
+function loadSample() {
+    document.getElementById("description").value =
+        "Create a dataset of three books. Each book should contain a title, author, and publication year. Include books published between 1995 and 2022.";
+}
+
+async function generateData() {
+
+    const description =
+        document.getElementById("description").value.trim();
+
+    const format =
+        document.getElementById("format").value;
+
+    const generateBtn =
+        document.getElementById("generateBtn");
+
+    const loading =
+        document.getElementById("loading");
+
+    const errorBox =
+        document.getElementById("errorBox");
+
+    errorBox.style.display = "none";
+
+    if (description.length < 5) {
+        errorBox.textContent =
+            "Please enter a meaningful dataset description.";
+
+        errorBox.style.display = "block";
+        return;
+    }
+
+    generateBtn.disabled = true;
+    generateBtn.textContent = "Generating...";
+
+    loading.style.display = "flex";
+
+    document.getElementById("loadingText").textContent =
+        "Ollama is generating and validating your data...";
+
+    try {
+
+        const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                description: description,
+                format: format
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Generation failed.");
+        }
+
+        displayResult(data);
+
+    } catch (error) {
+
+        errorBox.textContent = error.message;
+        errorBox.style.display = "block";
+
+    } finally {
+
+        generateBtn.disabled = false;
+        generateBtn.textContent = "Generate Structured Data";
+        loading.style.display = "none";
+    }
+}
+
+function displayResult(data) {
+
+    document.getElementById("emptyState").style.display = "none";
+
+    const resultSection =
+        document.getElementById("resultSection");
+
+    resultSection.style.display = "block";
+
+    const valid = data.success;
+
+    document.getElementById("resultTitle").textContent =
+        "Generated " + data.format;
+
+    const status = document.getElementById("resultStatus");
+
+    status.textContent = valid
+        ? "✓ Syntax Valid"
+        : "✕ Validation Failed";
+
+    status.className = valid
+        ? "status valid"
+        : "status invalid";
+
+    document.getElementById("modelMeta").textContent =
+        "Model: " + data.model;
+
+    document.getElementById("timeMeta").textContent =
+        "Time: " + data.time + " seconds";
+
+    document.getElementById("retryMeta").textContent =
+        "Attempts: " + data.attempts.length;
+
+    document.getElementById("codeLanguage").textContent =
+        data.format + " OUTPUT";
+
+    latestOutput = data.formatted_output;
+
+    document.getElementById("codeOutput").textContent =
+        data.formatted_output;
+
+    const validationMessage =
+        document.getElementById("validationMessage");
+
+    validationMessage.className = valid
+        ? "validation-message"
+        : "validation-message error-text";
+
+    if (valid) {
+        validationMessage.textContent =
+            "✓ The generated " + data.format +
+            " was successfully parsed and validated.";
+
+        if (data.refined) {
+            validationMessage.textContent +=
+                " Automatic refinement was required to correct the syntax.";
+        } else {
+            validationMessage.textContent +=
+                " No syntax correction was required.";
+        }
+
+    } else {
+        validationMessage.textContent =
+            "✕ Valid syntax could not be generated after " +
+            data.attempts.length + " attempts. " +
+            (data.error || "Please try a clearer description.");
+    }
+
+    const attemptList =
+        document.getElementById("attemptList");
+
+    attemptList.innerHTML = "";
+
+    data.attempts.forEach(attempt => {
+
+        const item = document.createElement("div");
+        item.className = "attempt-item";
+
+        const title = document.createElement("span");
+
+        title.textContent =
+            "Attempt " + attempt.attempt;
+
+        const result = document.createElement("span");
+
+        result.textContent = attempt.valid
+            ? "✓ Valid"
+            : "✕ Invalid";
+
+        result.className = attempt.valid
+            ? "attempt-good"
+            : "attempt-bad";
+
+        item.appendChild(title);
+        item.appendChild(result);
+
+        attemptList.appendChild(item);
+    });
+}
+
+async function copyOutput() {
+
+    if (!latestOutput) {
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(latestOutput);
+
+        const button = document.querySelector(".copy-btn");
+
+        button.textContent = "Copied!";
+
+        setTimeout(() => {
+            button.textContent = "Copy Output";
+        }, 1500);
+
+    } catch (error) {
+        alert("Unable to copy. Please select and copy the output manually.");
+    }
+}
+</script>
+
+</body>
+</html>

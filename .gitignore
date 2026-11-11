@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment variables and API keys
+.env
+.env.*
+!.env.example
+
+# Editors
+.vscode/
+.idea/
+
+# Temporary files
+*.log
+*.tmp
+
+# Generated files
+.DS_Store
+Thumbs.db
